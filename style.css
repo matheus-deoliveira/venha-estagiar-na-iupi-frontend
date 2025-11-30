@@ -121,6 +121,17 @@ header {
     transform: scale(0.98); /* Efeito de clique */
 }
 
+/* Padrão para navegadores Webkit (Chrome, Edge, Opera, etc) */
+input[type="date"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    transition: filter 0.3s ease;
+}
+
+/* Quando estiver no Modo Escuro, inverte a cor do ícone (Preto vira Branco) */
+body.dark-mode input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+}
+
 /* FORMULÁRIOS E INPUTS */
 
 .input-group {
@@ -162,6 +173,13 @@ select:focus {
     margin-top: 0.25rem;
     display: block;
     min-height: 1.2rem; /* Garante espaço fixo */
+}
+
+/* Remove as setas do Input Number */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }
 
 /* LISTA DE TRANSAÇÕES E FILTROS */
