@@ -47,18 +47,23 @@ function renderList(transactions) {
 
     transactions.forEach(transaction => {
         const li = document.createElement('li');
-        
-        // Adiciona classes para estilo (income/expense)
         li.classList.add('transaction-item', transaction.type);
 
+        // Criei uma div 'right-side' para agrupar Valor e Botão
         li.innerHTML = `
             <div class="transaction-info">
                 <h3>${transaction.description}</h3>
                 <p>${formatDate(transaction.date)}</p>
             </div>
-            <div class="transaction-amount">
-                ${transaction.type === 'expense' ? '-' : '+'} 
-                ${formatCurrency(transaction.amount)}
+            
+            <div class="right-side">
+                <div class="transaction-amount">
+                    ${transaction.type === 'expense' ? '-' : '+'} 
+                    ${formatCurrency(transaction.amount)}
+                </div>
+                <button class="delete-btn" data-id="${transaction.id}" aria-label="Excluir Transação">
+                    &times;
+                </button>
             </div>
         `;
 
@@ -151,6 +156,32 @@ FORM.addEventListener('submit', (event) => {
     updateBalance();
 
     FORM.reset();
+});
+
+// FUNÇÃO DE EXCLUIR
+
+LIST_ELEMENT.addEventListener('click', (event) => {
+    // Verificamos se o elemento clicado (ou o pai dele) tem a classe 'delete-btn'
+    const deleteButton = event.target.closest('.delete-btn');
+
+    // Se não clicou no botão, não faz nada
+    if (!deleteButton) return;
+
+    // 1. Pegar o ID que escondemos no atributo data-id
+    const idToDelete = Number(deleteButton.dataset.id);
+
+    // 2. Perguntar se tem certeza (Opcional, mas boa prática)
+    const confirmDelete = confirm('Tem certeza que deseja excluir esta transação?');
+    if (!confirmDelete) return;
+
+    // 3. Filtrar a lista GLOBAL removendo o item com esse ID
+    currentTransactions = currentTransactions.filter(transaction => {
+        return transaction.id !== idToDelete;
+    });
+
+    // 4. Atualizar a tela e o saldo
+    updateList();    // Redesenha a lista sem o item
+    updateBalance(); // Recalcula o total
 });
 
 // Filtros e Ordenação
