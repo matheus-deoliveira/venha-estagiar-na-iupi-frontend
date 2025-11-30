@@ -1,9 +1,12 @@
 // ESTADO GLOBAL
 
-// Usamos 'transactionsMock' que vem do arquivo mock/transactions.js
-// Se o mock não estiver carregando, usamos um array vazio [] para não quebrar.
-let currentTransactions = (typeof transactionsMock !== 'undefined') ? [...transactionsMock] : [];
+// Tenta pegar do LocalStorage primeiro
+const savedTransactions = localStorage.getItem('transactions');
 
+// Se tiver dados salvos, usa eles. Se não, usa o Mock. Se o Mock falhar, usa vazio.
+let currentTransactions = savedTransactions 
+    ? JSON.parse(savedTransactions) 
+    : (typeof transactionsMock !== 'undefined' ? [...transactionsMock] : []);
 
 // SELETORES DO DOM
 
@@ -122,6 +125,13 @@ function updateBalance() {
     }
 }
 
+/**
+ * Salva a lista atual no LocalStorage para não perder ao recarregar.
+ */
+function saveToLocalStorage() {
+    localStorage.setItem('transactions', JSON.stringify(currentTransactions));
+}
+
 // EVENTOS
 
 FORM.addEventListener('submit', (event) => {
@@ -155,6 +165,9 @@ FORM.addEventListener('submit', (event) => {
     // eu recalculo o extrato
     updateBalance();
 
+    // Salvando dados no localStorage
+    saveToLocalStorage();
+
     FORM.reset();
 });
 
@@ -182,16 +195,32 @@ LIST_ELEMENT.addEventListener('click', (event) => {
     // 4. Atualizar a tela e o saldo
     updateList();    // Redesenha a lista sem o item
     updateBalance(); // Recalcula o total
+    saveToLocalStorage(); // Salvando dados no localStorage
 });
 
 // Filtros e Ordenação
 SEARCH_INPUT.addEventListener('input', updateList);
 SORT_SELECT.addEventListener('change', updateList);
 
+// Verificar se já existe um tema salvo
+const savedTheme = localStorage.getItem('theme');
+
+// Se o tema salvo for 'dark', ativa ele imediatamente
+if (savedTheme === 'dark') {
+    document.body.classList.add('dark-mode');
+}
+
 // Tema Dark/Light
 if (THEME_SWITCHER_BTN) {
     THEME_SWITCHER_BTN.addEventListener('click', () => {
+        // Alterna a classe no body
         document.body.classList.toggle('dark-mode');
+
+        // Verifica se ficou escuro ou claro
+        const isDark = document.body.classList.contains('dark-mode');
+
+        // Salva a preferência no navegador
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
     });
 }
 
