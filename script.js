@@ -12,6 +12,7 @@ const THEME_SWITCHER_BTN = document.getElementById('theme-switcher');
 const FORM = document.getElementById('transaction-form');
 const SEARCH_INPUT = document.getElementById('search-filter');
 const SORT_SELECT = document.getElementById('sort-order');
+const BALANCE_ELEMENT = document.getElementById('total-balance');
 
 // FUNÇÕES AUXILIARES 
 
@@ -92,6 +93,30 @@ function updateList() {
     renderList(filteredTransactions);
 }
 
+function updateBalance() {
+    // A função 'reduce' percorre o array acumulando um valor único
+    const total = currentTransactions.reduce((acc, transaction) => {
+        if (transaction.type === 'income') {
+            return acc + transaction.amount;
+        } else {
+            return acc - transaction.amount;
+        }
+    }, 0); // O '0' é o valor inicial do acumulador
+
+    // Atualiza o texto na tela
+    BALANCE_ELEMENT.innerText = formatCurrency(total);
+
+    // Remove as cores antigas
+    BALANCE_ELEMENT.classList.remove('positive', 'negative');
+
+    // Adiciona a cor certa (Verde se >= 0, Vermelho se < 0)
+    if (total >= 0) {
+        BALANCE_ELEMENT.classList.add('positive');
+    } else {
+        BALANCE_ELEMENT.classList.add('negative');
+    }
+}
+
 // EVENTOS
 
 FORM.addEventListener('submit', (event) => {
@@ -120,6 +145,10 @@ FORM.addEventListener('submit', (event) => {
     // Chamamos updateList() em vez de renderList() direto.
     // Assim, se houver um filtro ativo, ele é respeitado.
     updateList();
+    
+    // Depois de cada submissão de Nova transação
+    // eu recalculo o extrato
+    updateBalance();
 
     FORM.reset();
 });
@@ -142,6 +171,7 @@ if (THEME_SWITCHER_BTN) {
  */
 function init() {
     updateList();
+    updateBalance();
 }
 
 // Inicia a aplicação

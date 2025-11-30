@@ -243,6 +243,38 @@ input[type="number"]::-webkit-inner-spin-button {
     color: var(--color-expense);
 }
 
+/* COMPONENTE DE SALDO */
+.balance-container {
+    background-color: var(--bg-color); /* Usa o fundo da página para contraste */
+    padding: 1rem;
+    border-radius: 4px;
+    margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid var(--border-color);
+}
+
+.balance-container span:first-child {
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+#total-balance {
+    font-size: 1.5rem;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+/* Cores dinâmicas para o saldo */
+#total-balance.positive {
+    color: var(--color-income);
+}
+
+#total-balance.negative {
+    color: var(--color-expense);
+}
+
 /* RESPONSIVIDADE (MEDIA QUERIES) */
 
 @media (min-width: 768px) {
