@@ -12,6 +12,60 @@
         <button id="theme-switcher">Mudar Tema</button>
     </header>
 
+    <main class="container">
+        <section class="form-section">
+            <h2>Nova Transação</h2>
+            <form id="transaction-form">
+                <div class="input-group">
+                    <label for="description">Descrição</label>
+                    <input type="text" id="description" placeholder="Ex: Conta de Luz" required>
+                    <span class="error-message" id="error-description"></span>
+                </div>
+
+                <div class="input-group">
+                    <label for="amount">Valor (R$)</label>
+                    <input type="number" id="amount" step="0.01" placeholder="0,00" required>
+                    <span class="error-message" id="error-amount"></span>
+                </div>
+
+                <div class="input-group">
+                    <label for="date">Data</label>
+                    <input type="date" id="date" required>
+                    <span class="error-message" id="error-date"></span>
+                </div>
+
+                <div class="input-group">
+                    <label for="type">Tipo</label>
+                    <select id="type" required>
+                        <option value="income">Entrada</option>
+                        <option value="expense">Saída</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn-primary">Adicionar</button>
+            </form>
+        </section>
+
+        <section class="list-section">
+            <h2>Extrato</h2>
+
+            <div class="controls">
+                <input type="search" id="search-filter" placeholder="Filtrar por descrição...">
+                
+                <select id="sort-order">
+                    <option value="date-desc">Data (Mais recentes)</option>
+                    <option value="date-asc">Data (Mais antigas)</option>
+                    <option value="amount-desc">Valor (Maior preço)</option>
+                    <option value="amount-asc">Valor (Menor preço)</option>
+                </select>
+            </div>
+
+            <ul id="transactions-list">
+                </ul>
+        </section>
+    </main>
+
+    <script src="mock/transactions.js"></script>
     <script src="script.js" type="module"></script>
 </body>
 </html>

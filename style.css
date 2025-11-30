@@ -1,13 +1,245 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
-    padding: 0;
+/* VARIÁVEIS E TEMA */
+
+:root {
+    /* Cores do Tema Light (Padrão) */
+    --bg-color: #f0f2f5;
+    --text-color: #333333;
+    --card-bg: #ffffff;
+    --border-color: #dddddd;
+    --primary-color: #4a90e2;
+    
+    /* Cores Semânticas (Independente do tema) */
+    --color-income: #2ecc71;
+    --color-expense: #e74c3c;
+    --color-danger-hover: #c0392b; /* Cor extra para hover de erros */
 }
 
+/* Tema Dark */
+body.dark-mode {
+    --bg-color: #121212;
+    --text-color: #e0e0e0;
+    --card-bg: #1e1e1e;
+    --primary-color: #bb86fc;
+    --border-color: #333333;
+}
+
+/* RESET E ESTILO BASE */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    /* Transição suave ao trocar de tema */
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+h1, h2, h3 {
+    color: var(--text-color);
+}
+
+h2 {
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 0.5rem;
+    display: inline-block;
+}
+
+/* LAYOUT (HEADER E CONTAINER) */
 header {
-    background-color: #333;
-    color: white;
+    background-color: var(--card-bg);
+    padding: 1rem 2rem;
+    box-shadow: 0 2px 5px rgba(0,0,0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.3s ease;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+    display: flex;
+    flex-direction: column; /* Mobile First: Coluna */
+    gap: 2rem;
+}
+
+/* COMPONENTES GERAIS (CARDS E BOTÕES) */
+
+/* Cards (Fundo branco/cinza das seções) */
+.form-section,
+.list-section {
+    background-color: var(--card-bg);
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0, 0.05); /* Sombra um pouco mais suave */
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Botão de Tema */
+#theme-switcher {
+    background: transparent;
+    border: 1px solid var(--text-color);
+    color: var(--text-color);
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+#theme-switcher:hover {
+    background-color: var(--bg-color);
+    transform: translateY(-1px); /* Leve efeito de "subir" */
+}
+
+/* Botão Primário (Adicionar) */
+.btn-primary {
+    width: 100%;
     padding: 1rem;
-    text-align: center;
+    background-color: var(--primary-color);
+    color: white; /* Texto branco fica melhor no contraste */
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.1s;
+}
+
+.btn-primary:hover {
+    opacity: 0.9;
+}
+
+.btn-primary:active {
+    transform: scale(0.98); /* Efeito de clique */
+}
+
+/* FORMULÁRIOS E INPUTS */
+
+.input-group {
+    margin-bottom: 1rem;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+/* Estilo unificado para Inputs e Selects */
+input[type="text"],
+input[type="number"],
+input[type="date"],
+input[type="search"],
+select {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+/* Estado de Foco (Acessibilidade e UX) */
+input:focus, 
+select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2); /* Contorno azul suave */
+}
+
+.error-message {
+    color: var(--color-expense);
+    font-size: 0.85rem;
+    margin-top: 0.25rem;
+    display: block;
+    min-height: 1.2rem; /* Garante espaço fixo */
+}
+
+/* LISTA DE TRANSAÇÕES E FILTROS */
+
+/* Filtros no topo da lista */
+.controls {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+#search-filter {
+    flex-grow: 1;
+}
+
+/* Item da Lista (Card Individual) */
+.transaction-item {
+    background-color: var(--bg-color);
+    padding: 1rem;
+    margin-bottom: 0.8rem;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-left: 5px solid transparent;
+    transition: transform 0.2s ease;
+}
+
+.transaction-item:hover {
+    transform: translateX(5px); /* Efeito visual ao passar o mouse */
+}
+
+.transaction-info h3 {
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+}
+
+.transaction-info p {
+    font-size: 0.85rem;
+    opacity: 0.7;
+}
+
+.transaction-amount {
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+/* Modificadores de Estado (Entrada/Saída) */
+/* Aqui é onde as cores de borda e dos valores são estilizados */
+.transaction-item.income {
+    border-left-color: var(--color-income);
+}
+.transaction-item.income .transaction-amount {
+    color: var(--color-income);
+}
+
+.transaction-item.expense {
+    border-left-color: var(--color-expense);
+}
+.transaction-item.expense .transaction-amount {
+    color: var(--color-expense);
+}
+
+/* RESPONSIVIDADE (MEDIA QUERIES) */
+
+@media (min-width: 768px) {
+    .container {
+        flex-direction: row; /* Lado a lado no Desktop */
+        align-items: flex-start;
+    }
+
+    .form-section {
+        flex: 1; 
+        position: sticky; /* O form acompanha a rolagem */
+        top: 2rem;
+    }
+
+    .list-section {
+        flex: 2; 
+    }
 }
